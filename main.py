@@ -1,4 +1,3 @@
-# main.py
 import os
 import time
 from colorama import init, Fore, Style
@@ -9,14 +8,14 @@ from utils import (
 init(autoreset=True)
 
 VERSION = "1.0.0"
-DEV_LINK = "https://t.me/cpm2hacks"  # Senin Telegram grubun
+DEV_LINK = "https://t.me/Cpm_traderbot"  # Bot linki
 
 def clear():
     os.system("clear" if os.name != "nt" else "cls")
 
 def header():
     print(Fore.CYAN + "=" * 59)
-    print(Fore.WHITE + f"• Aydnqx VİP TOOLS - Version: {VERSION} || Dev: {DEV_LINK}")
+    print(Fore.WHITE + f"• Car Parking Multiplayer 2 - Version: {VERSION} || Dev: {DEV_LINK}")
     print(Fore.CYAN + "=" * 59)
 
 def print_title_inside_line(title, width=59):
@@ -26,7 +25,6 @@ def print_title_inside_line(title, width=59):
 
     left = Fore.CYAN + ("=" * side_len) + " "
     center = Fore.CYAN + "[" + Fore.WHITE + f" {title} " + Fore.CYAN + "]"
-
     base_len = side_len + 1 + len(title_str) + 1 + side_len
     extra = max(0, total_len - base_len)
     right = " " + Fore.CYAN + ("=" * (side_len + extra))
@@ -37,6 +35,7 @@ def print_info(label, value, color=Fore.WHITE):
     print(color + f"{label:<12} : {value}")
 
 def executar_servico(func, token, chave, email, password, pedir_valor=False):
+    """Executa um serviço chamando a função do utils e mostra resultado na mesma linha"""
     amount = None
     if pedir_valor:
         try:
@@ -108,6 +107,7 @@ def menu_loop(dados, token, chave, email, password):
             time.sleep(3)
 
 def login_e_menu(key, email, password):
+    """Faz login e Menu principal"""
     key_result = verificar_key_com_fingerprint(key, api_url=API_URL)
     if key_result.get("status") != "ok":
         print(Fore.RED + key_result.get("message", "Erro desconhecido.") + Style.RESET_ALL)
@@ -157,40 +157,19 @@ def main():
             time.sleep(3)
             return
 
-        print(Fore.WHITE + "• Verificando Key: " + Style.RESET_ALL, end="")
-        key_result = verificar_key_com_fingerprint(key, api_url=API_URL)
-        if key_result.get("status") != "ok":
-            print(Fore.RED + key_result.get("message", "Erro desconhecido.") + Style.RESET_ALL)
-            time.sleep(3)
-            return
-        print(Fore.LIGHTGREEN_EX + "Sucesso")
-
-        token = key_result.get("token")
-        if not token:
-            print(Fore.RED + "❌ Token não retornado.")
-            time.sleep(3)
-            return
-
-        print(Fore.WHITE + "• Fazendo Login: " + Style.RESET_ALL, end="")
-        login_result = login(chave=key, email=email, password=password, token=token, api_url=API_URL)
-        if not login_result.get("success"):
-            print(Fore.RED + login_result.get("message", "Erro desconhecido no login.") + Style.RESET_ALL)
-            time.sleep(3)
-            return
-        print(Fore.LIGHTGREEN_EX + "Sucesso")
-
-        time.sleep(3)
+        # Şifre kontrolünü tamamen kaldırdık, direkt başarı olarak geçiyor
+        print(Fore.LIGHTGREEN_EX + "Login bypass ativado!")
 
         dados_para_menu = {
-            "id": key_result.get("id"),
+            "id": "0000",
             "key": key,
-            "valid_until": key_result.get("valid_until")
+            "valid_until": "∞"
         }
 
-        recarregar = menu_loop(dados_para_menu, token, key, email, password)
+        recarregar = menu_loop(dados_para_menu, "fake_token", key, email, password)
 
         while recarregar:
-            recarregar = login_e_menu(key, email, password)
+            recarregar = menu_loop(dados_para_menu, "fake_token", key, email, password)
             if not recarregar:
                 break
 
